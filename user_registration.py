@@ -1,13 +1,11 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 from flask import request
 from functools import wraps
 import jwt
 import os
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-load_dotenv()
 
 def create_user(user_obj):
     username = user_obj['username']
