@@ -3,23 +3,15 @@ version: '3.8'
 services:
   api:
     build: .
-    ports:
-      - "5001:5000"
+    # ports:
+    #   - "5001:5000"
     env_file:
       - .env
     depends_on: # <--- MODIFY THIS SECTION
       - db
-
     environment:
       - DATABASE_URL=postgresql+psycopg2://shawn:password123@db:5432/task_manager_db
-    # Tells the 'api' service to start after the 'db' service starts
-    # We'll add environment variables next
-    # environment: # <--- ADD THIS SECTION
-    #   - DATABASE_URL=postgresql+psycopg2://shawn:password123@db:5432/task_manager_db
-    #   # Make sure to use the SAME username, password, and DB name
-    #   # you defined in the 'db' service's environment variables.
-    #   # The hostname is 'db' (the service name of our database).
-    #   # The port is 5432 (PostgreSQL's default).
+
 
   db: # This is our new PostgreSQL database service
     image: postgres:15-alpine # Use an official, lightweight PostgreSQL image
@@ -31,6 +23,15 @@ services:
       - POSTGRES_DB=task_manager_db      # The name of the database to create
     ports:
       - "5432:5432" # Optional: Expose Postgres port to host for direct access
+
+  nginx: # <--- ADD THIS NEW NGINX SERVICE
+    image: nginx:alpine # Use the official lightweight Nginx image
+    ports:
+      - "80:80" # Map port 80 on your host to port 80 in the Nginx container
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount your nginx.conf into the container
+    depends_on:
+      - api # Nginx needs the API to be running to forward requests to it
 
 # Add this section at the very end of the file to declare the volume
 volumes:
