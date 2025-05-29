@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "5001:5000"
+    depends_on:
+      - db   # Tells the 'api' service to start after the 'db' service starts
+    # We'll add environment variables next
+    environment: # <--- ADD THIS SECTION
+      - DATABASE_URL=postgresql+psycopg2://shawn:password123@db:5432/task_manager_db
+      # Make sure to use the SAME username, password, and DB name
+      # you defined in the 'db' service's environment variables.
+      # The hostname is 'db' (the service name of our database).
+      # The port is 5432 (PostgreSQL's default).
+
+  db: # This is our new PostgreSQL database service
+    image: postgres:15-alpine # Use an official, lightweight PostgreSQL image
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/ # Persist database data
+    environment:
+      - POSTGRES_USER=shawn         # Replace with your desired username
+      - POSTGRES_PASSWORD=password123 # Replace with your desired password
+      - POSTGRES_DB=task_manager_db      # The name of the database to create
+    ports:
+      - "5432:5432" # Optional: Expose Postgres port to host for direct access
+
+# Add this section at the very end of the file to declare the volume
+volumes:
+  postgres_data:
