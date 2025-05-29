@@ -108,12 +108,6 @@ def login_user():
     else:
         # User not found or password incorrect
         return jsonify({'message': 'Invalid credentials'}), 401 # 401 is more standard for bad login
-
-        # if user_def == None:
-        #     return jsonify(f'Invalid Credentials.', 409)
-        # else:
-        #     validate_credentials = credential_logic.validate_credentials(user_req,user_def.hashed_password)
-        #     return jsonify(validate_credentials)
             
 
 #CRUD OPERATION LOGIC
