@@ -101,12 +101,11 @@ def login_user():
     user_from_db = session.scalars(user_query).first() # Changed variable name for clarity
 
     if user_from_db and credential_logic.validate_credentials(user_req['password'], user_from_db.hashed_password):
-        # If user exists and password is correct:
-        # Create token using the user's INTEGER ID from the database
+
         token_response = credential_logic.create_access_token(user_from_db.id)
         return jsonify(token_response), 200   
     else:
-        # User not found or password incorrect
+
         return jsonify({'message': 'Invalid credentials'}), 401 # 401 is more standard for bad login
             
 
